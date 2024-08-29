@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:/MPS in Analytics/Term - 1/ITC 6000/Project-5/Transportation_Management_System_DB.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="3027"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,8:mainCustomer"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Customer" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="117"/><column index="2" value="155"/><column index="3" value="153"/><column index="4" value="186"/><column index="5" value="103"/><column index="6" value="187"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Fuel_Consumption" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="178"/><column index="2" value="120"/><column index="3" value="91"/><column index="4" value="92"/><column index="5" value="82"/><column index="6" value="130"/><column index="7" value="97"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Insurance_Detail" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="182"/><column index="2" value="120"/><column index="3" value="182"/><column index="4" value="138"/><column index="5" value="244"/><column index="6" value="112"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Order_Table" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="83"/><column index="2" value="150"/><column index="3" value="156"/><column index="4" value="127"/><column index="5" value="127"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Payment_Record" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="178"/><column index="2" value="116"/><column index="3" value="150"/><column index="4" value="162"/><column index="5" value="134"/><column index="6" value="76"/><column index="7" value="149"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Schedule" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="113"/><column index="2" value="116"/><column index="3" value="120"/><column index="4" value="113"/><column index="5" value="143"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Vehicle" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="97"/><column index="2" value="120"/><column index="3" value="74"/><column index="4" value="159"/><column index="5" value="52"/><column index="6" value="81"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Vehicle_Driver" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="130"/><column index="2" value="120"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE Vehicle(
+		vehicle_id INT AUTO INCREMENT PRIMARY KEY,
+		make VARCHAR(50) NOT NULL,
+		model VARCHAR(50) NOT NULL,
+		number_of_tyres INT NOT NULL,
+		year INT NOT NULL,
+		capacity INT NOT NULL
+);
+	
+CREATE TABLE Driver(
+		driver_id INT AUTO INCREMENT PRIMARY KEY,
+		driver_fname VARCHAR(100) NOT NULL,
+		driver_lname VARCHAR(100) NOT NULL,
+		license_number VARCHAR(50) NOT NULL,
+		contact_information INT NOT NULL
+);
+
+CREATE TABLE Vehicle_Driver (
+	FK_vehicle_id INT,
+	FK_driver_id INT,
+	FOREIGN KEY (FK_vehicle_id) REFERENCES Vehicle(vehicle_id),
+	FOREIGN KEY (FK_driver_id) REFERENCES Driver(driver_id)
+);
+
+CREATE TABLE Fuel_Consumption(
+	fuel_transaction_id INT AUTO INCREMENT PRIMARY KEY,
+	FK_driver_id INT,
+	fill_date date NOT NULL,
+	fuel_type VARCHAR(100) NOT NULL,
+	quantity INT NOT NULL,
+	cost_per_unit INT NOT NULL,
+	total_cost INT NOT NULL,
+	FOREIGN KEY (FK_driver_id) REFERENCES Driver(driver_id)
+);
+
+CREATE TABLE Maintenance_Record(
+	maintenance_id INT AUTO INCREMENT PRIMARY KEY,
+	FK_driver_id INT,
+	maintenance_date date NOT NULL,
+	description VARCHAR(200) NOT NULL,
+	cost INT NOT NULL,
+	FOREIGN KEY (FK_driver_id) REFERENCES Driver(driver_id)
+);
+
+CREATE TABLE Insurance_Detail(
+	insurance_policy_id INT AUTO INCREMENT PRIMARY KEY,
+	FK_driver_id INT,
+	insurance_company VARCHAR(100) NOT NULL,
+	policy_number VARCHAR(50) NOT NULL,
+	coverage_detail VARCHAR(200),
+	expiry_date date NOT NULL,
+	FOREIGN KEY (FK_driver_id) REFERENCES Driver(driver_id)
+);
+
+CREATE TABLE Route(
+	route_id INT AUTO INCREMENT PRIMARY KEY,
+	starting_point VARCHAR(100) NOT NULL,
+	destination VARCHAR(100) NOT NULL,
+	distance INT NOT NULL,
+	estimated_time INT NOT NULL
+);
+
+CREATE TABLE Schedule(
+	schedule_id INT AUTO INCREMENT PRIMARY KEY,
+	FK_route_id INT,
+	FK_driver_id INT,
+	arrival_time time,
+	departure_time time,
+	FOREIGN KEY (FK_route_id) REFERENCES Route(route_id),
+	FOREIGN KEY (FK_driver_id) REFERENCES Driver(driver_id)
+);
+
+CREATE TABLE Customer(
+		customer_id INT AUTO INCREMENT PRIMARY KEY,
+		customer_fname VARCHAR(100) NOT NULL,
+		customer_lname VARCHAR(100) NOT NULL,
+		contact_information INT NOT NULL,
+		address VARCHAR(100) NOT NULL,
+		email VARCHAR(100)
+);
+
+CREATE TABLE Order_Table(
+		order_id INT AUTO INCREMENT PRIMARY KEY,
+		FK_customer_id INT,
+		delivery_address VARCHAR(100) NOT NULL,
+		delivery_time time,
+		delivery_date date,
+		FOREIGN KEY (FK_customer_id) REFERENCES Customer(customer_id)
+);
+
+CREATE TABLE Payment_Record(
+	payment_record_id INT AUTO INCREMENT PRIMARY KEY,
+	FK_order_id INT,
+	FK_customer_id INT,
+	payment_method VARCHAR(50) NOT NULL,
+	payment_date date,
+	amount INT NOT NULL,
+	payment_status VARCHAR(50) NOT NULL,
+	FOREIGN KEY (FK_order_id) REFERENCES Order_Table(order_id),
+	FOREIGN KEY (FK_customer_id) REFERENCES Customer(customer_id)
+);
+
+
+INSERT INTO Vehicle (vehicle_id, make, model, number_of_tyres, year, capacity)
+VALUES
+(1,'Toyota', 'Camry', 4, 2015, 5),
+(2,'Ford', 'F-150', 4, 2018, 3),
+(3,'Honda', 'Civic', 4, 2017, 5),
+(4,'Chevrolet', 'Silverado', 6, 2016, 3),
+(5,'Nissan', 'Altima', 4, 2019, 5),
+(6,'BMW', 'X5', 4, 2016, 5),
+(7,'Mercedes-Benz', 'E-Class', 4, 2017, 5),
+(8,'Audi', 'A4', 4, 2018, 5),
+(9,'Hyundai', 'Elantra', 4, 2019, 5),
+(10,'Kia', 'Optima', 4, 2019, 5);
+
+INSERT INTO Driver (driver_id, driver_fname, driver_lname, license_number, contact_information)
+VALUES
+(1,'John', 'Doe', 'DL123456', '123-456-7890'),
+(2,'Jane', 'Smith', 'DL654321', '987-654-3210'),
+(3,'Michael', 'Johnson', 'DL789456', '555-555-5555'),
+(4,'Emily', 'Brown', 'DL987654', '111-222-3333'),
+(5,'Chris', 'Anderson', 'DL456789', '444-555-6666'),
+(6,'Sarah', 'Williams', 'DL321987', '777-888-9999'),
+(7,'David', 'Martinez', 'DL159753', '333-222-1111'),
+(8,'Jessica', 'Taylor', 'DL753951', '666-777-8888'),
+(9,'William', 'Jackson', 'DL852963', '999-888-7777'),
+(10,'Samantha', 'Davis', 'DL369258', '222-333-4444');
+
+
+INSERT INTO Vehicle_Driver (FK_vehicle_id, FK_driver_id)
+VALUES
+(1, 1),
+(2, 9),
+(3, 8),
+(4, 4),
+(5, 3),
+(6, 6),
+(7, 2),
+(8, 7),
+(9, 5),
+(10, 10);
+
+INSERT INTO Route (route_id, starting_point, destination, distance, estimated_time)
+VALUES
+(1,'City A', 'City B', 200, 180),
+(2,'City B', 'City C', 150, 120),
+(3,'City C', 'City D', 180, 150),
+(4,'City D', 'City E', 220, 200),
+(5,'City E', 'City F', 250, 220),
+(6,'City F', 'City G', 300, 250),
+(7,'City G', 'City H', 280, 230),
+(8,'City H', 'City I', 200, 180),
+(9,'City I', 'City J', 150, 120),
+(10,'City J', 'City K', 180, 150);
+
+INSERT INTO Schedule (schedule_id, FK_route_id, FK_driver_id, arrival_time, departure_time)
+VALUES
+(1, 1, 1, '08:00:00', '10:00:00'),
+(2, 2, 2, '09:00:00', '11:30:00'),
+(3, 3, 4, '10:30:00', '13:00:00'),
+(4, 4, 3, '11:00:00', '14:00:00'),
+(5, 5, 5, '12:30:00', '15:30:00'),
+(6, 6, 6, '13:00:00', '16:30:00'),
+(7, 7, 8, '14:30:00', '18:00:00'),
+(8, 8, 9, '15:00:00', '19:00:00'),
+(9, 9, 7, '16:30:00', '20:30:00'),
+(10, 10, 10, '17:00:00', '21:00:00');
+
+INSERT INTO Maintenance_Record (maintenance_id, FK_driver_id, maintenance_date, description, cost)
+VALUES
+(1, 1, '2023-01-05', 'Regular service', 100),
+(2, 2, '2023-01-10', 'Oil change', 80),
+(3, 3, '2023-01-15', 'Brake replacement', 150),
+(4, 4, '2023-01-20', 'Tire rotation', 120),
+(5, 5, '2023-01-25', 'Engine check', 200),
+(6, 6, '2023-01-30', 'Wheel alignment', 180),
+(7, 7, '2023-02-05', 'Oil change', 160),
+(8, 8, '2023-02-10', 'Regular service', 130),
+(9, 9, '2023-02-15', 'Wheel alignment', 140),
+(10, 10, '2023-02-20', 'Regular service', 110);
+
+INSERT INTO Insurance_Detail (insurance_policy_id, FK_driver_id, insurance_company, policy_number, coverage_detail, expiry_date)
+VALUES
+(1, 1, 'ABC Insurance', '12345', 'Comprehensive coverage', '2023-12-31'),
+(2, 2, 'XYZ Insurance', '54321', 'Third-party liability', '2023-12-31'),
+(3, 3, 'DEF Insurance', '67890', 'Collision coverage', '2023-12-31'),
+(4, 4, 'GHI Insurance', '09876', 'Medical payments coverage', '2023-12-31'),
+(5, 5, 'JKL Insurance', '45678', 'Uninsured motorist coverage', '2023-12-31'),
+(6, 6, 'MNO Insurance', '98765', 'Rental reimbursement coverage', '2023-12-31'),
+(7, 7, 'PQR Insurance', '23456', 'Underinsured motorist coverage', '2023-12-31'),
+(8, 8, 'STU Insurance', '76543', 'Personal injury protection', '2023-12-31'),
+(9, 9, 'VWX Insurance', '89012', 'Property damage liability', '2023-12-31'),
+(10, 10, 'YZA Insurance', '32109', 'Bodily injury liability', '2023-12-31');
+
+INSERT INTO Fuel_Consumption (fuel_transaction_id, FK_driver_id, fill_date, fuel_type, quantity, cost_per_unit, total_cost)
+VALUES
+(1, 1, '2023-01-01', 'Diesel', 50, 2, 100),
+(2, 2, '2023-01-02', 'Gasoline', 40, 3, 120),
+(3, 3, '2023-01-03', 'Diesel', 60, 2.5, 150),
+(4, 4, '2023-01-04', 'Gasoline', 45, 3.2, 144),
+(5, 5, '2023-01-05', 'Diesel', 55, 2.3, 126.5),
+(6, 6, '2023-01-06', 'Gasoline', 50, 3.1, 155),
+(7, 7, '2023-01-07', 'Diesel', 65, 2.6, 169),
+(8, 8, '2023-01-08', 'Gasoline', 55, 3.3, 181.5),
+(9, 9, '2023-01-09', 'Diesel', 70, 2.8, 196),
+(10, 10, '2023-01-10', 'Gasoline', 60, 3.5, 210);
+
+INSERT INTO Customer (customer_id, customer_fname, customer_lname, contact_information, address, email)
+VALUES
+(1,'John', 'Doe', '123-456-7890', '123 Main St', 'john@example.com'),
+(2,'Jane', 'Smith', '987-654-3210', '456 Elm St', 'jane@example.com'),
+(3,'Michael', 'Johnson', '555-555-5555', '789 Oak St', 'michael@example.com'),
+(4,'Emily', 'Brown', '111-222-3333', '321 Pine St', 'emily@example.com'),
+(5,'David', 'Wilson', '999-888-7777', '567 Maple St', 'david@example.com'),
+(6,'Sarah', 'Davis', '333-444-5555', '890 Birch St', 'sarah@example.com'),
+(7,'Robert', 'Martinez', '777-666-5555', '987 Cedar St', 'robert@example.com'),
+(8,'Jessica', 'Thompson', '222-333-4444', '654 Pine St', 'jessica@example.com'),
+(9,'William', 'Lee', '888-999-1111', '456 Oak St', 'william@example.com'),
+(10,'Elizabeth', 'Garcia', '444-555-6666', '321 Elm St', 'elizabeth@example.com');
+
+INSERT INTO Order_Table (order_id, FK_customer_id, delivery_address, delivery_time, delivery_date)
+VALUES
+(1, 1, '123 Main St', '10:00:00', '2023-01-15'),
+(2, 2, '456 Elm St', '11:00:00', '2023-01-16'),
+(3, 3, '789 Oak St', '12:00:00', '2023-01-17'),
+(4, 4, '321 Pine St', '13:00:00', '2023-01-18'),
+(5, 5, '567 Maple St', '14:00:00', '2023-01-19'),
+(6, 6, '890 Birch St', '15:00:00', '2023-01-20'),
+(7, 7, '987 Cedar St', '16:00:00', '2023-01-21'),
+(8, 8, '654 Pine St', '17:00:00', '2023-01-22'),
+(9, 9, '456 Oak St', '18:00:00', '2023-01-23'),
+(10, 10, '321 Elm St', '19:00:00', '2023-01-24');
+
+INSERT INTO Payment_Record (payment_record_id, FK_order_id, FK_customer_id, payment_method, payment_date, amount, payment_status)
+VALUES
+(1, 1, 1, 'Credit Card', '2023-01-15', 100.00, 'Paid'),
+(2, 2, 2, 'PayPal', '2023-01-16', 150.00, 'Pending'),
+(3, 3, 3, 'Cash', '2023-01-17', 200.00, 'Paid'),
+(4, 4, 4, 'Credit Card', '2023-01-18', 250.00, 'Pending'),
+(5, 5, 5, 'PayPal', '2023-01-19', 300.00, 'Pending'),
+(6, 6, 6, 'Cash', '2023-01-20', 350.00, 'Paid'),
+(7, 7, 7, 'Credit Card', '2023-01-21', 400.00, 'Paid'),
+(8, 8, 8, 'PayPal', '2023-01-22', 450.00, 'Paid'),
+(9, 9, 9, 'Cash', '2023-01-23', 500.00, 'Pending'),
+(10, 10, 10, 'Credit Card', '2023-01-24', 550.00, 'Paid');
+
+-- 1. Retrieve list of drivers along with their assigned vehicles --
+
+SELECT d.driver_fname, d.driver_lname, v.make, v.model
+FROM Driver d
+INNER JOIN Vehicle_Driver vd ON d.driver_id = vd.FK_driver_id
+INNER JOIN Vehicle v ON vd.FK_vehicle_id = v.vehicle_id;
+
+-- 2. Total Fuel Consumption by each driver --
+
+SELECT d.driver_fname, d.driver_lname, SUM(fc.quantity) AS total_fuel_consumed
+FROM Driver d
+INNER JOIN Fuel_Consumption fc ON d.driver_id = fc.FK_driver_id
+GROUP BY d.driver_id;
+
+-- 3. Total amount paid by each customer --
+
+SELECT c.customer_id, c.customer_fname, c.customer_lname, SUM(pr.amount) AS total_amount_paid
+FROM Customer c
+JOIN Payment_Record pr ON c.customer_id = pr.FK_customer_id
+GROUP BY c.customer_id, c.customer_fname, c.customer_lname;
+
+-- 4. Retrieve all maintenance records for vehicles with capacity greater than 4 --
+
+SELECT m.*, v.make, v.model
+FROM Maintenance_Record m
+JOIN Vehicle_Driver vd ON m.FK_driver_id = vd.FK_driver_id
+JOIN Vehicle v ON vd.FK_vehicle_id = v.vehicle_id
+WHERE v.capacity &gt; 4;
+
+-- 5. Average Cost of fuel consumption --
+
+SELECT d.driver_id, d.driver_fname, d.driver_lname, AVG(fc.total_cost) AS avg_fuel_cost
+FROM Driver d
+JOIN Fuel_Consumption fc ON d.driver_id = fc.FK_driver_id
+GROUP BY d.driver_id, d.driver_fname, d.driver_lname;
+
+-- 6. Routes with longest estimated time and their corresponding drives --
+
+SELECT r.route_id, r.starting_point, r.destination, r.estimated_time, d.driver_fname, d.driver_lname
+FROM Route r
+JOIN Schedule s ON r.route_id = s.FK_route_id
+JOIN Driver d ON s.FK_driver_id = d.driver_id
+WHERE r.estimated_time = (SELECT MAX(estimated_time) FROM Route);
+
+-- 7. List of customers with pending payment status --
+
+SELECT c.customer_id, c.customer_fname, c.customer_lname, p.payment_status
+FROM Customer c
+JOIN Order_Table o ON c.customer_id = o.FK_customer_id
+JOIN Payment_Record p ON o.order_id = p.FK_order_id
+WHERE p.payment_status = 'Pending';
+
+
+
+
+
+
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
